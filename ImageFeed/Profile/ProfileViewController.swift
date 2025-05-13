@@ -50,7 +50,7 @@ final class ProfileViewController: UIViewController {
         
         
         let descriptionLabel = UILabel()
-        descriptionLabel.text = "@ekaterina_nov"
+        descriptionLabel.text = "Hello, world!"
         descriptionLabel.font = .systemFont(ofSize: 13)
         descriptionLabel.textColor = UIColor(named: "YP White (iOS)") ?? .white
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
