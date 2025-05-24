@@ -15,6 +15,10 @@
 		E846EDFF2DC37DE500BEDD32 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E846EDF22DC37DE500BEDD32 /* ImagesListViewController.swift */; };
 		E846EE002DC37DE500BEDD32 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E846EDF82DC37DE500BEDD32 /* SceneDelegate.swift */; };
 		E846EE3B2DC37FAE00BEDD32 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E846EE3A2DC37FAE00BEDD32 /* ImagesListCell.swift */; };
+		E85C0B672DE220EE00BA1A5D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E85C0B662DE220EE00BA1A5D /* WebKit.framework */; };
+		E8C7D33F2DDBB37F00FAA92E /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D33E2DDBB37F00FAA92E /* AuthViewController.swift */; };
+		E8C7D3422DDBB4DA00FAA92E /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D3412DDBB4DA00FAA92E /* WebViewViewController.swift */; };
+		E8DF80962DD8D418004EE25D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DF80952DD8D418004EE25D /* Constants.swift */; };
 		E8F4CEC92DC53C40004C441C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4CEC82DC53C40004C441C /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +33,10 @@
 		E846EDF62DC37DE500BEDD32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E846EDF82DC37DE500BEDD32 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E846EE3A2DC37FAE00BEDD32 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		E85C0B662DE220EE00BA1A5D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		E8C7D33E2DDBB37F00FAA92E /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		E8C7D3412DDBB4DA00FAA92E /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		E8DF80952DD8D418004EE25D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E8F4CEC82DC53C40004C441C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -37,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E85C0B672DE220EE00BA1A5D /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				E846EDF92DC37DE500BEDD32 /* ImageFeed */,
+				E85C0B652DE220EE00BA1A5D /* Frameworks */,
 				E846EC9E2DBD3EDA00BEDD32 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,7 +74,9 @@
 			children = (
 				E846EDF02DC37DE500BEDD32 /* AppDelegate.swift */,
 				E846EDF82DC37DE500BEDD32 /* SceneDelegate.swift */,
+				E8DF80952DD8D418004EE25D /* Constants.swift */,
 				E846EDF12DC37DE500BEDD32 /* Assets.xcassets */,
+				E8C7D3402DDBB3BD00FAA92E /* Auth */,
 				E8F4CEC72DC53BDD004C441C /* Profile */,
 				E846EE3D2DC37FE100BEDD32 /* ImagesList */,
 				E8611A3B2DCF784D006D88FA /* SingleImageView */,
@@ -84,12 +96,29 @@
 			path = ImagesList;
 			sourceTree = "<group>";
 		};
+		E85C0B652DE220EE00BA1A5D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E85C0B662DE220EE00BA1A5D /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E8611A3B2DCF784D006D88FA /* SingleImageView */ = {
 			isa = PBXGroup;
 			children = (
 				E83081442DC77DD3003C8693 /* SingleImageViewController.swift */,
 			);
 			path = SingleImageView;
+			sourceTree = "<group>";
+		};
+		E8C7D3402DDBB3BD00FAA92E /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E8C7D33E2DDBB37F00FAA92E /* AuthViewController.swift */,
+				E8C7D3412DDBB4DA00FAA92E /* WebViewViewController.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		E8F4CEC72DC53BDD004C441C /* Profile */ = {
@@ -178,7 +207,10 @@
 				E846EE3B2DC37FAE00BEDD32 /* ImagesListCell.swift in Sources */,
 				E8F4CEC92DC53C40004C441C /* ProfileViewController.swift in Sources */,
 				E846EDFF2DC37DE500BEDD32 /* ImagesListViewController.swift in Sources */,
+				E8C7D33F2DDBB37F00FAA92E /* AuthViewController.swift in Sources */,
+				E8DF80962DD8D418004EE25D /* Constants.swift in Sources */,
 				E83081452DC77DD3003C8693 /* SingleImageViewController.swift in Sources */,
+				E8C7D3422DDBB4DA00FAA92E /* WebViewViewController.swift in Sources */,
 				E846EE002DC37DE500BEDD32 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,9 +242,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M8V82WNZF8;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ImageFeed/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -228,6 +261,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.sergswan.ImageFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -241,9 +275,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M8V82WNZF8;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ImageFeed/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -259,6 +294,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.sergswan.ImageFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
