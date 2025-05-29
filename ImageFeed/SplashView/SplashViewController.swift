@@ -13,14 +13,14 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
+    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let storage = OAuth2TokenStorage()
     
     //MARK: - Lifecycle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tokenIsValid( )
+        checkToken()
     }
     
     // MARK: - Public Methods
@@ -36,10 +36,10 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    private func tokenIsValid()  {
+    private func  checkToken()  {
         guard let token = storage.token else {
             print ("Нет токена")
-            return performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
+            return performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
         }
         print("Токен есть: \(token)")
         switchToTabBarController()
@@ -62,20 +62,14 @@ extension SplashViewController: AuthViewControllerDelegate {
 
 extension SplashViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowAuthenticationScreenSegueIdentifier {
+        if segue.identifier == showAuthenticationScreenSegueIdentifier {
             guard
                 let navigationController = segue.destination as? UINavigationController,
                 let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)") }
+            else { fatalError("Failed to prepare for \(showAuthenticationScreenSegueIdentifier)") }
             viewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
 }
-
-
-
-
-
-

@@ -25,20 +25,28 @@ extension URLSession {
         }
         
         let task = dataTask(with: request, completionHandler: { data, response, error in
-            if let data = data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200 ..< 300 ~= statusCode {
-                    fulfillCompletionOnTheMainThread(.success(data))
+            guard let data = data,
+                  let response = response as? HTTPURLResponse else {
+                if let error = error {
+                    fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
+                    print("[Network] Ошибка запроса: \(error.localizedDescription)")
                 } else {
-                    fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
-                    print("[Network] Ошибка HTTP: статус \(statusCode)")
+                    fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
+                    print("[Network] Неизвестная ошибка сессии")
                 }
-            } else if let error = error {
-                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
-                print("[Network] Ошибка запроса: \(error.localizedDescription)")
-            } else {
-                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
-                print("[Network] Неизвестная ошибка сессии")
+                return
             }
+
+            let statusCode = response.statusCode
+
+            guard (200...299).contains(statusCode) else {
+                fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
+                print("[Network] Ошибка HTTP: статус \(statusCode)")
+                return
+            }
+
+            fulfillCompletionOnTheMainThread(.success(data))
+           
         })
         
         return task
