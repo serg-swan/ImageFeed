@@ -6,7 +6,7 @@
 //
 import UIKit
 import Foundation
-
+import ProgressHUD
 
 // на него подписан SplashViewController
 protocol AuthViewControllerDelegate: AnyObject {
@@ -33,19 +33,33 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
+    func alertPresenter() {
+    let alert = UIAlertController(title: "Что-то пошло не так",
+                                  message: "Не удалось войти в систему",
+                                  preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default) {[weak self] _ in
+            self?.present(alert, animated: false)
+        print("Алерт показан") }
+        
+        alert.addAction(action)
+        present(alert, animated: true)
+}
     
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true) // Закрыли WebView
+       UIBlockingProgressHUD.show()//
         OAuth2Service.shared.fetchOAuthToken(code) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
                 case .success:
                     self.delegate?.didAuthenticate(self)
+                   UIBlockingProgressHUD.dismiss()
                 case .failure(let error):
+                    self.alertPresenter()
                     print("Ошибка получения токена: \(error)")
                 }
             }
@@ -57,3 +71,5 @@ extension AuthViewController: WebViewViewControllerDelegate {
         vc.dismiss(animated: true)
     }
 }
+
+

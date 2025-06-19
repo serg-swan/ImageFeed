@@ -6,19 +6,32 @@
 //
 
 import Foundation
+import UIKit
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
+    static let shared = OAuth2TokenStorage()
+    private init() {}
+    
     private let tokenKey = "OAuth2Token"
     var token: String? {
-        get {return UserDefaults.standard.string(forKey: tokenKey)}
-        set {UserDefaults.standard.set(newValue, forKey: tokenKey)}
+        get { return KeychainWrapper.standard.string(forKey: tokenKey)}
+        set { guard let newValue else {
+            print("Токен не сохранен")
+            return
+        }
+            KeychainWrapper.standard.set(newValue, forKey: tokenKey)}
     }
+    
 }
 
-struct OAuthTokenResponseBody: Decodable {
-    let access_token: String
+struct OAuthTokenResponseBody: Codable {
+    let accessToken: String
 }
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
 
 final class OAuth2Service {
     // глобальная точка входа
@@ -28,18 +41,19 @@ final class OAuth2Service {
     
     // MARK: - Private Properties
     
-    private let tokenStorage = OAuth2TokenStorage()
+    private let tokenStorage = OAuth2TokenStorage.shared
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
+    private var lastCode: String?
     
     // MARK: - Public Methods
     
-    func makeOAuthTokenRequest(code: String) -> URLRequest {
+    func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard  let baseURL = URL(string: "https://unsplash.com") else {
             print("[OAuth2Service] Ошибка: не удалось создать базовый URL")
-            preconditionFailure("Ошибка: не удалось создать базовый URL")
+            assertionFailure("Failed to create URL")
+            return nil
         }
-        
         guard  let url = URL(
             string: "/oauth/token"
             + "?client_id=\(Constants.accessKey)"         // Используем знак ?, чтобы начать перечисление параметров запроса
@@ -59,33 +73,42 @@ final class OAuth2Service {
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Swift.Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
-        if task != nil {
-            task?.cancel()
-        }
-        let request = makeOAuthTokenRequest(code: code)
         
-        let task = urlSession.data(for: request) { result in
+        guard lastCode != code else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        task?.cancel()
+        lastCode = code
+        guard let request = makeOAuthTokenRequest(code: code)
+        else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        let task = urlSession.objectTask(for: request) { [weak self]  (result: Result<OAuthTokenResponseBody, Error>) in
+            defer {
+                self?.task = nil
+                self?.lastCode = nil
+            }
             switch result {
             case .success(let data):
                 do {
-                    let decoder = JSONDecoder()
-                    let responseBody = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let access_token = responseBody.access_token
-                    self.tokenStorage.token = access_token
-                    completion(.success(access_token))
+                    
+                    let accessToken =  data.accessToken
+                    self?.tokenStorage.token = accessToken
+                    DispatchQueue.main.async {
+                        completion(.success(accessToken))
+                    }
                     print("Код успешно получен и сохранен")
-                } catch {
-                    completion(.failure(error))
-                    print("Failed to decode: \(error)")
                 }
             case .failure(let error):
-                completion(.failure(error))
-                print("Failed to decode: \(error)")
+                print("[OAuth2Service][fetchOAuthToken] Error: \(error) ")
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }
-        
         self.task = task
         task.resume()
-        
     }
 }

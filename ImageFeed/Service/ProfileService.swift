@@ -1,0 +1,94 @@
+//
+//  ProfileService.swift
+//  ImageFeed
+//
+//  Created by Сергей Лебедь on 04.06.2025.
+//
+
+import Foundation
+
+struct ProfileRsult: Codable {
+    let username: String
+    var firstName: String?
+    var lastName: String?
+    var bio: String?
+}
+enum ProfileServiceError: Error {
+    case invalidProfileRequest
+}
+
+struct Profile {
+    let userName: String
+    let name: String
+    let loginName: String
+    let bio: String
+    init(from result: ProfileRsult){
+        self.userName = result.username
+        self.name = "\(result.firstName ?? "") \(result.lastName ?? "")"
+        self.loginName = "@" + result.username
+        self.bio = result.bio ?? ""
+    }
+}
+
+final class ProfileService {
+    static let shared = ProfileService()
+    private init() {}
+    
+    // MARK: Private Properties
+    
+    private(set) var profile: Profile?
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    let token =  OAuth2TokenStorage.shared
+    
+    //MARK: Public Methods
+    
+    func makeProfileRequest (token: String) -> URLRequest? {
+        guard let url = URL(string: "https://api.unsplash.com/me") else {
+            print("Не верный url")
+            fatalError("Invalid URL")
+        }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        assert(Thread.isMainThread)
+        task?.cancel()
+        
+        guard let token = self.token.token   else {
+            completion(.failure(ProfileServiceError.invalidProfileRequest))
+            return }
+        guard let request = makeProfileRequest(token: token) else {
+            completion(.failure(ProfileServiceError.invalidProfileRequest))
+            return }
+        
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileRsult, Error>) in
+            defer {
+                self?.task = nil
+            }
+            switch result {
+            case .success(let data):
+                let profile = Profile(from: data)
+                self?.profile = profile
+                DispatchQueue.main.async {
+                    completion(.success(profile))
+                }
+                print(profile)
+                
+            case .failure(let error):
+                print("[ProfileService][fetchProfile] Error: \(error) ")
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
+        self.task = task
+        task.resume()
+    }
+    
+}

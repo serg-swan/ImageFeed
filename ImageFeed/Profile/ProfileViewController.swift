@@ -6,11 +6,16 @@
 //
 import UIKit
 import Foundation
+import Kingfisher
+import SwiftKeychainWrapper
+
 
 final class ProfileViewController: UIViewController {
     
-    // MARK: - Private Properties
     
+    // MARK: - Private Properties
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private let profile = ProfileService.shared.profile
     private let imageView = UIImageView()
     private let nameLabel = UILabel()
     private let loginLabel = UILabel()
@@ -21,28 +26,51 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupImageVievUI()
+        view.backgroundColor = UIColor(named: "YP Black (iOS)")
         setupNameLabelUI()
         setupLoginUI()
         setupDescriptionLabelUI()
         setupButtonUI()
         addSubview()
         setupConstraint()
-        
+        guard let profile else { return }
+        updateProfileDetails(profile)
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeNotification,
+                         object: nil,
+                         queue: .main
+            ) { [weak self] _ in
+                print("Получено уведомление об изменении аватара!")
+                guard let  self = self  else { return}
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
     // MARK: - Private Methods
     
-    private func setupImageVievUI() {
-        
-        guard let profileImage = UIImage(named: "Avatar") else {  fatalError("Изображение Avatar не найдено в Assets.xcassets") }
-        let imageView = self.imageView
-        imageView.image = profileImage
+    private func updateAvatar() {
+        guard let profileImageURL = ProfileImageService.shared.avatarURL,
+              let url = URL(string: profileImageURL)
+        else { return }
+        print("аватар установлен")
+        let placeholderImage =  UIImage(systemName: "person.crop.circle.fill")
+        imageView.tintColor = .gray
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        let processor = RoundCornerImageProcessor(cornerRadius: 16)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: url,
+                              placeholder: placeholderImage ,
+                              options: [.processor(processor)])
+    }
+    
+    private func updateProfileDetails(_ profile: Profile) {
+        nameLabel.text = profile.name
+        loginLabel.text = profile.userName
+        descriptionLabel.text = profile.bio
     }
     
     private func setupNameLabelUI() {
-        
         let nameLabel = self.nameLabel
         nameLabel.text = "Екатерина Новикова"
         nameLabel.font = .boldSystemFont(ofSize: 23)
@@ -107,6 +135,9 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
+        KeychainWrapper.standard.removeObject(forKey: "OAuth2Token")
+        print("Токен удален")
+        OAuth2TokenStorage.shared.token = nil
         
     }
     
