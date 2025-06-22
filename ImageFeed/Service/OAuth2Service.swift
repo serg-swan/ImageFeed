@@ -47,6 +47,7 @@ final class OAuth2Service {
     private var lastCode: String?
     
     // MARK: - Public Methods
+   
     
     func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard  let baseURL = URL(string: "https://unsplash.com") else {
@@ -92,15 +93,12 @@ final class OAuth2Service {
             }
             switch result {
             case .success(let data):
-                do {
-                    
                     let accessToken =  data.accessToken
                     self?.tokenStorage.token = accessToken
                     DispatchQueue.main.async {
                         completion(.success(accessToken))
                     }
                     print("Код успешно получен и сохранен")
-                }
             case .failure(let error):
                 print("[OAuth2Service][fetchOAuthToken] Error: \(error) ")
                 DispatchQueue.main.async {

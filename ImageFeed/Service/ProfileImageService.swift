@@ -49,7 +49,8 @@ final class ProfileImageService {
             return}
         guard let request =  makeProfileImageRequest(token: token) else {
             completion(.failure(ProfileServiceError.invalidProfileRequest))
-            return }
+            return
+        }
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             defer {
@@ -63,12 +64,12 @@ final class ProfileImageService {
                 DispatchQueue.main.async {
                     completion(.success(avatarURL))
                 }
-                    NotificationCenter.default
-                        .post(
-                            name: ProfileImageService.didChangeNotification,
-                            object: self,
-                            userInfo: ["avatarURL": avatarURL ])
-                    print("avatarURL обновлен \(avatarURL)")
+                NotificationCenter.default
+                    .post(
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["avatarURL": avatarURL ])
+                print("avatarURL обновлен \(avatarURL)")
                 
             case .failure(let error):
                 print("[ProfileImageService][fetchProfileImageURL] Error: \(error) ")

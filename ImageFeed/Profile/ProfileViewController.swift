@@ -33,6 +33,12 @@ final class ProfileViewController: UIViewController {
         setupButtonUI()
         addSubview()
         setupConstraint()
+        configurePrifileAvatar()
+        updateAvatar()
+    }
+    
+    // MARK: - Private Methods
+    private func configurePrifileAvatar() {
         guard let profile else { return }
         updateProfileDetails(profile)
         profileImageServiceObserver = NotificationCenter.default
@@ -44,16 +50,13 @@ final class ProfileViewController: UIViewController {
                 guard let  self = self  else { return}
                 self.updateAvatar()
             }
-        updateAvatar()
+        
     }
-    
-    // MARK: - Private Methods
     
     private func updateAvatar() {
         guard let profileImageURL = ProfileImageService.shared.avatarURL,
               let url = URL(string: profileImageURL)
         else { return }
-        print("аватар установлен")
         let placeholderImage =  UIImage(systemName: "person.crop.circle.fill")
         imageView.tintColor = .gray
         imageView.translatesAutoresizingMaskIntoConstraints = false

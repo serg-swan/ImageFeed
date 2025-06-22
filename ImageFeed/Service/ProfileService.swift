@@ -54,18 +54,19 @@ final class ProfileService {
     }
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+     
         
         assert(Thread.isMainThread)
         task?.cancel()
         
         guard let token = self.token.token   else {
             completion(.failure(ProfileServiceError.invalidProfileRequest))
-            return }
+            return
+        }
         guard let request = makeProfileRequest(token: token) else {
             completion(.failure(ProfileServiceError.invalidProfileRequest))
-            return }
+            return
+        }
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileRsult, Error>) in
             defer {
