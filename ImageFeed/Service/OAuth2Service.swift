@@ -9,30 +9,6 @@ import Foundation
 import UIKit
 import SwiftKeychainWrapper
 
-final class OAuth2TokenStorage {
-    static let shared = OAuth2TokenStorage()
-    private init() {}
-    
-    private let tokenKey = "OAuth2Token"
-    var token: String? {
-        get { return KeychainWrapper.standard.string(forKey: tokenKey)}
-        set { guard let newValue else {
-            print("Токен не сохранен")
-            return
-        }
-            KeychainWrapper.standard.set(newValue, forKey: tokenKey)}
-    }
-    
-}
-
-struct OAuthTokenResponseBody: Codable {
-    let accessToken: String
-}
-
-enum AuthServiceError: Error {
-    case invalidRequest
-}
-
 final class OAuth2Service {
     // глобальная точка входа
     static let shared = OAuth2Service()
@@ -55,15 +31,17 @@ final class OAuth2Service {
             assertionFailure("Failed to create URL")
             return nil
         }
-        guard  let url = URL(
-            string: "/oauth/token"
-            + "?client_id=\(Constants.accessKey)"         // Используем знак ?, чтобы начать перечисление параметров запроса
-            + "&&client_secret=\(Constants.secretKey)"    // Используем &&, чтобы добавить дополнительные параметры
-            + "&&redirect_uri=\(Constants.redirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            relativeTo: baseURL                           // Опираемся на основной или базовый URL, которые содержат схему и имя хоста
-        ) else {
+        var urlComponents = URLComponents()
+        urlComponents.path = "/oauth/token"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "client_secret", value: Constants.secretKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
+            URLQueryItem(name: "code", value: code),
+            URLQueryItem(name: "grant_type", value: "authorization_code")
+            ]
+        
+        guard  let url = urlComponents.url(relativeTo: baseURL) else {
             print("URL не создан")
             preconditionFailure("URL не создан")
         }

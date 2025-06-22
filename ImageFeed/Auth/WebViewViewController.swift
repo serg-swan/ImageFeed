@@ -31,6 +31,11 @@ final class WebViewViewController: UIViewController {
     // MARK: - Public Properties
     private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
+    private var code = false
+    // MARK: - Deinitialization
+    deinit {
+        estimatedProgressObservation = nil  //прекращается наблюдение
+    }
     
     // MARK: - Lifecycle
     
@@ -59,8 +64,17 @@ final class WebViewViewController: UIViewController {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
-        
-    
+
+  private  func alertPresenter() {
+        let alert = UIAlertController(title: "Что-то пошло не так",
+                                      message: "Не удалось войти в систему",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK",
+                                   style: .default)
+        print("Алерт показан")
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
     
     private func loadAuthView() {
         // Мы инициализируем структуру URLComponents с указанием адреса запроса.
@@ -87,7 +101,6 @@ final class WebViewViewController: UIViewController {
 }
 
 extension WebViewViewController: WKNavigationDelegate {
-    // релизация метода протокола. Этот метод вызывается, когда в результате действий пользователя WKWebView готовится совершить навигационные действия (например, загрузить новую страницу). Благодаря этому мы узнаем, когда пользователь успешно авторизовался.
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
@@ -104,17 +117,22 @@ extension WebViewViewController: WKNavigationDelegate {
         }
     }
     
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        guard !code else { return }
+          alertPresenter()
+      }
+    
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        
         guard
             let url = navigationAction.request.url,
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false), //указывает, что не нужно учитывать базовый URL при разборе
-            //  /oauth/authorize/native не проверяется тк оличается redirect_uri
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
                 let code = components.queryItems?.first(where: { $0.name == "code" })?.value
         else {
             return nil
         }
+        self.code = true
         return code
     }
     
 }
+

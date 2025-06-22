@@ -7,29 +7,6 @@
 
 import Foundation
 
-struct ProfileRsult: Codable {
-    let username: String
-    var firstName: String?
-    var lastName: String?
-    var bio: String?
-}
-enum ProfileServiceError: Error {
-    case invalidProfileRequest
-}
-
-struct Profile {
-    let userName: String
-    let name: String
-    let loginName: String
-    let bio: String
-    init(from result: ProfileRsult){
-        self.userName = result.username
-        self.name = "\(result.firstName ?? "") \(result.lastName ?? "")"
-        self.loginName = "@" + result.username
-        self.bio = result.bio ?? ""
-    }
-}
-
 final class ProfileService {
     static let shared = ProfileService()
     private init() {}

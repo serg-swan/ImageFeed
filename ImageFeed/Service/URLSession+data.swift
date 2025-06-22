@@ -32,18 +32,18 @@ extension URLSession {
                 do {
                     let decodetJsonObject = try decoder.decode(T.self, from: data)
                     fulfillCompletionOnTheMainThread(.success(decodetJsonObject))
-                        print("JSON раскодирован")
-                    }
+                    print("JSON раскодирован")
+                }
                 
                 catch{
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.decodingError(error)))
                     print("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    }
+                }
                 
             case .failure(let error):
                 fulfillCompletionOnTheMainThread(.failure(error))
-                    print("Ошибка загрузки  \(error)")
-                }
+                print("Ошибка загрузки  \(error)")
+            }
         }
         return task
     }
@@ -72,17 +72,17 @@ extension URLSession {
                 }
                 return
             }
-
+            
             let statusCode = response.statusCode
-
+            
             guard (200...299).contains(statusCode) else {
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
                 print("[Network] Ошибка HTTP: статус \(statusCode)")
                 return
             }
-
+            
             fulfillCompletionOnTheMainThread(.success(data))
-           
+            
         })
         
         return task

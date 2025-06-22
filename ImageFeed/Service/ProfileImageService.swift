@@ -7,20 +7,6 @@
 
 import Foundation
 
-struct UserResult: Codable {
-    let profileImage: ProfileImageURL
-    
-    
-}
-struct ProfileImageURL: Codable {
-    let small: String?
-    
-}
-enum ProfileImageServiceError: Error {
-    case invalidProfileRequest
-}
-
-
 final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}

@@ -33,17 +33,7 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    func alertPresenter() {
-        let alert = UIAlertController(title: "Что-то пошло не так",
-                                      message: "Не удалось войти в систему",
-                                      preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK",
-                                   style: .default)
-        print("Алерт показан")
-        alert.addAction(action)
-        present(alert, animated: true)
-        
-    }
+   
 }
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
@@ -57,7 +47,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                     self.delegate?.didAuthenticate(self)
                     UIBlockingProgressHUD.dismiss()
                 case .failure(let error):
-                    self.alertPresenter()
+                  
                     print("Ошибка получения токена: \(error)")
                 }
             }
