@@ -29,8 +29,13 @@ final class WebViewViewController: UIViewController {
     @IBOutlet private weak var progressView: UIProgressView!
     
     // MARK: - Public Properties
-    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
+    private var code = false
+    // MARK: - Deinitialization
+    deinit {
+        estimatedProgressObservation = nil  //прекращается наблюдение
+    }
     
     // MARK: - Lifecycle
     
@@ -38,7 +43,13 @@ final class WebViewViewController: UIViewController {
         super.viewDidLoad()
         webView.navigationDelegate = self
         loadAuthView()
-        
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
     }
     
     // MARK: - IBActions
@@ -46,42 +57,23 @@ final class WebViewViewController: UIViewController {
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
-    // добавляем наблюдатель
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        updateProgress()
-    }
-    // MARK: - Public methods
-    
-    //удаляем наблюдатель
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
-    }
-    // метод обработчик обновлений
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
     
     // MARK: - Private methods
     
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+    
+    private  func alertPresenter() {
+        let alert = UIAlertController(title: "Что-то пошло не так",
+                                      message: "Не удалось войти в систему",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK",
+                                   style: .default)
+        print("Алерт показан")
+        alert.addAction(action)
+        present(alert, animated: true)
     }
     
     private func loadAuthView() {
@@ -109,7 +101,6 @@ final class WebViewViewController: UIViewController {
 }
 
 extension WebViewViewController: WKNavigationDelegate {
-    // релизация метода протокола. Этот метод вызывается, когда в результате действий пользователя WKWebView готовится совершить навигационные действия (например, загрузить новую страницу). Благодаря этому мы узнаем, когда пользователь успешно авторизовался.
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
@@ -126,17 +117,22 @@ extension WebViewViewController: WKNavigationDelegate {
         }
     }
     
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        guard !code else { return }
+        alertPresenter()
+    }
+    
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        
         guard
             let url = navigationAction.request.url,
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false), //указывает, что не нужно учитывать базовый URL при разборе
-            //  /oauth/authorize/native не проверяется тк оличается redirect_uri
-                let code = components.queryItems?.first(where: { $0.name == "code" })?.value
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            let code = components.queryItems?.first(where: { $0.name == "code" })?.value
         else {
             return nil
         }
+        self.code = true
         return code
     }
     
 }
+
