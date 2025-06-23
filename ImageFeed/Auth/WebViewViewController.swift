@@ -44,12 +44,12 @@ final class WebViewViewController: UIViewController {
         webView.navigationDelegate = self
         loadAuthView()
         estimatedProgressObservation = webView.observe(
-                   \.estimatedProgress,
-                   options: [],
-                   changeHandler: { [weak self] _, _ in
-                       guard let self = self else { return }
-                       self.updateProgress()
-                   })
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
     }
     
     // MARK: - IBActions
@@ -57,15 +57,15 @@ final class WebViewViewController: UIViewController {
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
-  
-   // MARK: - Private methods
-  
+    
+    // MARK: - Private methods
+    
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
-
-  private  func alertPresenter() {
+    
+    private  func alertPresenter() {
         let alert = UIAlertController(title: "Что-то пошло не так",
                                       message: "Не удалось войти в систему",
                                       preferredStyle: .alert)
@@ -119,14 +119,14 @@ extension WebViewViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         guard !code else { return }
-          alertPresenter()
-      }
+        alertPresenter()
+    }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
         guard
             let url = navigationAction.request.url,
             let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                let code = components.queryItems?.first(where: { $0.name == "code" })?.value
+            let code = components.queryItems?.first(where: { $0.name == "code" })?.value
         else {
             return nil
         }

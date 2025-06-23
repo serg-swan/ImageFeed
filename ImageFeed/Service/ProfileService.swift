@@ -53,9 +53,7 @@ final class ProfileService {
             case .success(let data):
                 let profile = Profile(from: data)
                 self?.profile = profile
-                DispatchQueue.main.async {
                     completion(.success(profile))
-                }
                 print(profile)
                 
             case .failure(let error):

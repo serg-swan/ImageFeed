@@ -79,9 +79,8 @@ final class OAuth2Service {
                     print("Код успешно получен и сохранен")
             case .failure(let error):
                 print("[OAuth2Service][fetchOAuthToken] Error: \(error) ")
-                DispatchQueue.main.async {
                     completion(.failure(error))
-                }
+                
             }
         }
         self.task = task

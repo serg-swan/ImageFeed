@@ -47,9 +47,9 @@ final class ProfileImageService {
                 
                 let avatarURL = data
                 self?.avatarURL = avatarURL.profileImage.small
-                DispatchQueue.main.async {
+
                     completion(.success(avatarURL))
-                }
+                
                 NotificationCenter.default
                     .post(
                         name: ProfileImageService.didChangeNotification,
@@ -59,10 +59,7 @@ final class ProfileImageService {
                 
             case .failure(let error):
                 print("[ProfileImageService][fetchProfileImageURL] Error: \(error) ")
-                DispatchQueue.main.async {
                     completion(.failure(error))
-                }
-                
             }
         }
         self.task = task
