@@ -45,7 +45,7 @@ final class ProfileService {
             return
         }
         
-        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileRsult, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             defer {
                 self?.task = nil
             }

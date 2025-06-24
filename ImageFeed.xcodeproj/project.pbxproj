@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E829846D2E07FF17007BBCE3 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E829846C2E07FF17007BBCE3 /* OAuth2TokenStorage.swift */; };
+		E82984E72E09D468007BBCE3 /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82984E62E09D468007BBCE3 /* ImagesListService.swift */; };
 		E83081452DC77DD3003C8693 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83081442DC77DD3003C8693 /* SingleImageViewController.swift */; };
 		E846EDFA2DC37DE500BEDD32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E846EDF12DC37DE500BEDD32 /* Assets.xcassets */; };
 		E846EDFC2DC37DE500BEDD32 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E846EDF52DC37DE500BEDD32 /* LaunchScreen.storyboard */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		E829846C2E07FF17007BBCE3 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
+		E82984E62E09D468007BBCE3 /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 		E83081442DC77DD3003C8693 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		E846EC9D2DBD3EDA00BEDD32 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E846EDF02DC37DE500BEDD32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				E8896BE82DF0BAC4009AAF22 /* ProfileService.swift */,
 				E8896BEA2DF5D8A2009AAF22 /* ProfileImageService.swift */,
 				E829846C2E07FF17007BBCE3 /* OAuth2TokenStorage.swift */,
+				E82984E62E09D468007BBCE3 /* ImagesListService.swift */,
 				E82984882E080467007BBCE3 /* Errors */,
 				E829847A2E08038F007BBCE3 /* Models */,
 			);
@@ -301,6 +304,7 @@
 				E8896BEB2DF5D8A2009AAF22 /* ProfileImageService.swift in Sources */,
 				E846EE002DC37DE500BEDD32 /* SceneDelegate.swift in Sources */,
 				E8896BE92DF0BAC4009AAF22 /* ProfileService.swift in Sources */,
+				E82984E72E09D468007BBCE3 /* ImagesListService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
