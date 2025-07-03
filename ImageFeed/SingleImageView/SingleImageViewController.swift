@@ -13,17 +13,17 @@ final class SingleImageViewController: UIViewController {
     // MARK: - Public Properties
     
     var imageURL: URL? {
-          didSet {
-              guard isViewLoaded else { return }
-              loadImage()
-          }
-      }
+        didSet {
+            guard isViewLoaded else { return }
+            loadImage()
+        }
+    }
     
-       var image: UIImage? {
+    var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
-           updateUI(with: image)
-        scrollView.contentInsetAdjustmentBehavior = .never
+            updateUI(with: image)
+            scrollView.contentInsetAdjustmentBehavior = .never
         }
     }
     
@@ -40,39 +40,39 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
         guard let image else {
             return loadImage() }
-     updateUI(with: image)
+        updateUI(with: image)
         
     }
     
     // MARK: - Private Methods
     
     private func loadImage() {
-           guard let imageURL = imageURL else { return }
+        guard let imageURL = imageURL else { return }
         UIBlockingProgressHUD.show()
-           imageView.kf.indicatorType = .activity
-           imageView.kf.setImage(
-               with: imageURL,
-               placeholder: UIImage(named: "placeholderImageCell"),
-               options: [.transition(.fade(0.3))], completionHandler: { [weak self] result in
-                   guard let self = self else { return }
-                   UIBlockingProgressHUD.dismiss()
-                   switch result {
-                   case .success(let value):
-                       self.updateUI(with: value.image)
-                   case .failure(let error):
-                       self.showError()
-                       print("Error loading image: \(error)")
-                     
-                   }
-               }
-           
-           )
-       }
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(
+            with: imageURL,
+            placeholder: UIImage(named: "placeholderImageCell"),
+            options: [.transition(.fade(0.3))], completionHandler: { [weak self] result in
+                guard let self = self else { return }
+                UIBlockingProgressHUD.dismiss()
+                switch result {
+                case .success(let value):
+                    self.updateUI(with: value.image)
+                case .failure(let error):
+                    self.showError()
+                    print("Error loading image: \(error)")
+                    
+                }
+            }
+            
+        )
+    }
     private func updateUI(with image: UIImage) {
-          imageView.image = image
-          imageView.frame.size = image.size
-          rescaleAndCenterImageInScrollView(image: image)
-      }
+        imageView.image = image
+        imageView.frame.size = image.size
+        rescaleAndCenterImageInScrollView(image: image)
+    }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
@@ -95,7 +95,7 @@ final class SingleImageViewController: UIViewController {
     private func centerImageInScrollView() {
         guard let image = imageView.image else { return }
         let imageSize = image.size
-
+        
         let scaledImageWidth = imageSize.width * scrollView.zoomScale
         let scaledImageHeight = imageSize.height * scrollView.zoomScale
         
@@ -114,24 +114,24 @@ final class SingleImageViewController: UIViewController {
         let alert = UIAlertController(title: "Что-то пошло не так",
                                       message: "Попробовать еще раз?",
                                       preferredStyle: .alert)
-       
-          alert.addAction(
-              UIAlertAction(
-                  title: "Не надо",
-                  style: .cancel,
-                  handler: nil
-              )
-          )
-          
-          alert.addAction(
-              UIAlertAction(
-                  title: "Повторить",
-                  style: .default,
-                  handler: { _ in
-                      self.loadImage()
-                  }
-                  )
-              )
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Не надо",
+                style: .cancel,
+                handler: nil
+            )
+        )
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Повторить",
+                style: .default,
+                handler: { _ in
+                    self.loadImage()
+                }
+            )
+        )
         present(alert, animated: true)
     }
     
@@ -150,7 +150,7 @@ final class SingleImageViewController: UIViewController {
     @IBAction private func didTapBackBatton() {
         dismiss(animated: true, completion: nil)
     }
-        
+    
 }
 
 extension SingleImageViewController: UIScrollViewDelegate {

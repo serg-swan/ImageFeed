@@ -18,6 +18,9 @@ final class ImagesListService {
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     
+    func clearImageList() {
+        photos = []
+      }
     
     func changeLike(_ token: String, photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -27,23 +30,18 @@ final class ImagesListService {
             completion(.failure(ImagesListServiseError.InvalidImagesListResponse))
             return
         }
-        
         let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
             defer {
                 self.task = nil
             }
             if let error = error {
-                print("ошибка установки лайка")
                 completion(.failure(error))
                 return
             }
             completion(.success(()))
-          
             if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                 self.photos[index].isLiked.toggle()
-                print("Лайк установлен")
- // инвертируем значение
             }
         }
         self.task = task
@@ -91,14 +89,10 @@ final class ImagesListService {
             }
             switch result {
             case .success(let photoResults):
-               
                 let newPhotos = photoResults.map { Photo(from: $0) }
-              
+                
                 self?.photos.append(contentsOf: newPhotos)
-               
-                print(" всего фото \(self?.photos.count ?? 0)")
                 completion(.success(photoResults))
-                print("Фото загружено \(newPhotos.count)")
                 NotificationCenter.default
                     .post(
                         name: ImagesListService.didChangeNotification,
@@ -112,9 +106,6 @@ final class ImagesListService {
         }
         self.task = task
         task.resume()
-        
     }
     
 }
-
-

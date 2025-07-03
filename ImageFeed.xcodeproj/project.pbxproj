@@ -10,6 +10,8 @@
 		E829846D2E07FF17007BBCE3 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E829846C2E07FF17007BBCE3 /* OAuth2TokenStorage.swift */; };
 		E82984E72E09D468007BBCE3 /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82984E62E09D468007BBCE3 /* ImagesListService.swift */; };
 		E83081452DC77DD3003C8693 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83081442DC77DD3003C8693 /* SingleImageViewController.swift */; };
+		E83891FF2E1712CE00919321 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83891FE2E1712CE00919321 /* DateFormatter.swift */; };
+		E83892012E171D7300919321 /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83892002E171D7300919321 /* ProfileLogoutService.swift */; };
 		E846EDFA2DC37DE500BEDD32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E846EDF12DC37DE500BEDD32 /* Assets.xcassets */; };
 		E846EDFC2DC37DE500BEDD32 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E846EDF52DC37DE500BEDD32 /* LaunchScreen.storyboard */; };
 		E846EDFD2DC37DE500BEDD32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E846EDF72DC37DE500BEDD32 /* Main.storyboard */; };
@@ -49,6 +51,8 @@
 		E82984E62E09D468007BBCE3 /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 		E829850E2E0B450D007BBCE3 /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83081442DC77DD3003C8693 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		E83891FE2E1712CE00919321 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		E83892002E171D7300919321 /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
 		E846EC9D2DBD3EDA00BEDD32 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E846EDF02DC37DE500BEDD32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E846EDF12DC37DE500BEDD32 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,6 +135,7 @@
 				E846EDF02DC37DE500BEDD32 /* AppDelegate.swift */,
 				E846EDF82DC37DE500BEDD32 /* SceneDelegate.swift */,
 				E8DF80952DD8D418004EE25D /* Constants.swift */,
+				E83891FE2E1712CE00919321 /* DateFormatter.swift */,
 				E846EDF12DC37DE500BEDD32 /* Assets.xcassets */,
 				E864CE812DE4E953001A5B90 /* SplashView */,
 				E8896BF72E01EEF2009AAF22 /* TabBarController */,
@@ -181,6 +186,7 @@
 				E8896BEA2DF5D8A2009AAF22 /* ProfileImageService.swift */,
 				E829846C2E07FF17007BBCE3 /* OAuth2TokenStorage.swift */,
 				E82984E62E09D468007BBCE3 /* ImagesListService.swift */,
+				E83892002E171D7300919321 /* ProfileLogoutService.swift */,
 				E82984882E080467007BBCE3 /* Errors */,
 				E829847A2E08038F007BBCE3 /* Models */,
 			);
@@ -359,6 +365,8 @@
 				E864CE7E2DE390E8001A5B90 /* URLSession+data.swift in Sources */,
 				E8C7D3422DDBB4DA00FAA92E /* WebViewViewController.swift in Sources */,
 				E864CE7C2DE37937001A5B90 /* OAuth2Service.swift in Sources */,
+				E83892012E171D7300919321 /* ProfileLogoutService.swift in Sources */,
+				E83891FF2E1712CE00919321 /* DateFormatter.swift in Sources */,
 				E8896BEB2DF5D8A2009AAF22 /* ProfileImageService.swift in Sources */,
 				E846EE002DC37DE500BEDD32 /* SceneDelegate.swift in Sources */,
 				E8896BE92DF0BAC4009AAF22 /* ProfileService.swift in Sources */,

@@ -22,16 +22,14 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var imageCell: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
-   
+    
     @IBAction func didTapButton(_ sender: Any) {
         delegate?.imageListCellDidTapLike(self)
-        print("Like button tapped")
+       
     }
     override func prepareForReuse() {
         super.prepareForReuse()
-        // Отменяем загрузку, чтобы избежать багов при переиспользовании ячеек
         imageCell.kf.cancelDownloadTask()
-       
         imageCell.image = UIImage(named: "placeholderImageCell")
         currentImageURL = nil
     }

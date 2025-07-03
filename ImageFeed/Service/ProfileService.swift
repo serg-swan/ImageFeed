@@ -20,6 +20,10 @@ final class ProfileService {
     
     //MARK: Public Methods
     
+    func clearProfile() {
+          profile = nil
+      }
+    
     func makeProfileRequest (token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
             print("Не верный url")

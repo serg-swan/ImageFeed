@@ -19,19 +19,6 @@ final class ImagesListViewController: UIViewController {
     private var imagesListServiceObserver: NSObjectProtocol?
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
-    private lazy var iso8601Formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter
-    }()
-    private lazy var displayDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateFormat = "d MMMM yyyy"
-        return formatter
-    }()
-    
     
     // MARK: - Lifecycle
     
@@ -57,7 +44,7 @@ final class ImagesListViewController: UIViewController {
                 self.updateTableViewAnimated()
             case .failure(let error):
                 print("Error loading initial photos: \(error)")
-                // Можно показать сообщение об ошибке
+             
             }
         }
     }
@@ -84,21 +71,14 @@ final class ImagesListViewController: UIViewController {
         for photo in photos {
             print( "\(photo.id)"  )
         }
-      
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map {
-                    IndexPath(row: $0, section: 0)
-                }
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
         
-    }
-    
-    private func formatDate(_ dateString: String) -> String {
-        guard let date = iso8601Formatter.date(from: dateString) else {
-            return dateString
-        }
-        return displayDateFormatter.string(from: date)
+        tableView.performBatchUpdates {
+            let indexPaths = (oldCount..<newCount).map {
+                IndexPath(row: $0, section: 0)
+            }
+            tableView.insertRows(at: indexPaths, with: .automatic)
+        } completion: { _ in }
+        
     }
     
     private func setupTableView() {
@@ -127,26 +107,29 @@ extension ImagesListViewController: UITableViewDataSource {
         imageListCell.imageCell.kf.setImage(
             with: URL(string: photo.thumbImageURL),
             placeholder: UIImage(named: "placeholderImageCell"),
-      completionHandler: { [weak self] result in
-            guard let self = self,
-                  case .success(let imageResult) = result,
-                  oldSize != imageResult.image.size else { return }
-            
-            // Обновляем размер в модели данных
-            self.photos[indexPath.row].size = imageResult.image.size
-            
-            DispatchQueue.main.async {
-                // Проверяем, что ячейка всё ещё видима и размер изменился
-                if let visiblePaths = tableView.indexPathsForVisibleRows,
-                   visiblePaths.contains(indexPath) {
-                    UIView.performWithoutAnimation {
-                        tableView.reloadRows(at: [indexPath], with: .none)
+            completionHandler: { [weak self] result in
+                guard let self = self,
+                      case .success(let imageResult) = result,
+                      oldSize != imageResult.image.size else { return }
+                self.photos[indexPath.row].size = imageResult.image.size
+                DispatchQueue.main.async {
+                    if let visiblePaths = tableView.indexPathsForVisibleRows,
+                       visiblePaths.contains(indexPath) {
+                        UIView.performWithoutAnimation {
+                            tableView.reloadRows(at: [indexPath], with: .none)
+                        }
                     }
                 }
             }
-        }
         )
-        imageListCell.dateLabel.text = formatDate(photo.createdAt ?? " ")
+        if  let date = photo.createdAt {
+            imageListCell.dateLabel.text =  DateFormatter.russianMediumDate.string(from: date)
+        }
+            else {
+            imageListCell.dateLabel.text = ""
+        }
+       
+       
         let likeImage = photo.isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         imageListCell.likeButton.setImage(likeImage, for: .normal)
         return imageListCell
@@ -172,7 +155,6 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == photos.count - 1 {
-            print("Индекс последней строки \(indexPath.row)")
             guard let token = OAuth2TokenStorage.shared.token else { return }
             imagesListService.fetchPhotosNextPage(token) {[weak self] result in
                 guard let self else { return }
@@ -218,19 +200,11 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 switch result {
                 case .success:
                     guard let self else {return}
-                    // Синхронизируем массив картинок с сервисом
                     self.photos = self.imagesListService.photos
-                    // Изменим индикацию лайка картинки
-               
-                        cell.setIsLiked(self.photos[indexPath.row].isLiked)
-                   
-                    
+                    cell.setIsLiked(self.photos[indexPath.row].isLiked)
                 case .failure:
-                  
                     print("Error")
-                
-                    // Покажем, что что-то пошло не так
-                    // TODO: Показать ошибку с использованием UIAlertController
+                    
                 }
             }
         }

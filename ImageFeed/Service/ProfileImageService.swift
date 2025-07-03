@@ -17,6 +17,10 @@ final class ProfileImageService {
     private var task: URLSessionTask?
     let token =  OAuth2TokenStorage.shared
     
+    func clearProfileImage() {
+        avatarURL = nil
+      }
+    
     func makeProfileImageRequest (token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
             print("Не верный url")

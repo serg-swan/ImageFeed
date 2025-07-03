@@ -9,7 +9,7 @@ import Foundation
 struct Photo {
     let id: String
     var size: CGSize
-    let createdAt: String?
+    let createdAt: Date?
     var welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
@@ -18,7 +18,7 @@ struct Photo {
     init(from result: PhotoResult) {
         self.id = result.id
         self.size = CGSize(width: result.width, height: result.height)
-        self.createdAt = result.createdAt 
+        self.createdAt = ISO8601DateFormatter().date(from: result.createdAt)
         self.welcomeDescription = result.description
         self.thumbImageURL = result.urls.thumb
         self.largeImageURL = result.urls.regular
