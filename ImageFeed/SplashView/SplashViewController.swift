@@ -98,6 +98,7 @@ final class SplashViewController: UIViewController {
             }
         }
     }
+   
 }
 
 extension SplashViewController: AuthViewControllerDelegate {

@@ -35,7 +35,7 @@ final class ProfileService {
         
         assert(Thread.isMainThread)
         task?.cancel()
-        
+        task = nil
         guard let token = self.token.token   else {
             completion(.failure(ProfileServiceError.invalidProfileRequest))
             return

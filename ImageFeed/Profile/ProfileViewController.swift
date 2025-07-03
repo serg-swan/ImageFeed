@@ -33,12 +33,12 @@ final class ProfileViewController: UIViewController {
         setupButtonUI()
         addSubview()
         setupConstraint()
-        configurePrifileAvatar()
+        configureProfileAvatar()
         updateAvatar()
     }
     
     // MARK: - Private Methods
-    private func configurePrifileAvatar() {
+    private func configureProfileAvatar() {
         guard let profile else { return }
         updateProfileDetails(profile)
         profileImageServiceObserver = NotificationCenter.default
