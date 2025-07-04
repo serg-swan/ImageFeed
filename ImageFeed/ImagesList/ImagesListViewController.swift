@@ -5,7 +5,7 @@
 //  Created by Сергей Лебедь on 26.04.2025.
 //
 import UIKit
-import ProgressHUD
+
 
 final class ImagesListViewController: UIViewController {
     
@@ -62,23 +62,16 @@ final class ImagesListViewController: UIViewController {
     }
     
     func updateTableViewAnimated() {
-        
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
-        
         guard newCount > oldCount else { return }
         photos = imagesListService.photos
-        for photo in photos {
-            print( "\(photo.id)"  )
-        }
-        
         tableView.performBatchUpdates {
             let indexPaths = (oldCount..<newCount).map {
                 IndexPath(row: $0, section: 0)
             }
             tableView.insertRows(at: indexPaths, with: .automatic)
         } completion: { _ in }
-        
     }
     
     private func setupTableView() {

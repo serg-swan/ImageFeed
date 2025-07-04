@@ -49,10 +49,10 @@ final class ImagesListService {
     }
     
     func makeLikedPhotosRequest (token: String, photoId: String, isLike: Bool ) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
-            print("Не верный url для лайка")
-            fatalError("Invalid URL")
-        }
+        let baseUrl = Constants.defaultBaseURL
+        var urlComponents = URLComponents()
+        urlComponents.path = "photos/\(photoId)/like"
+        let url = baseUrl.appendingPathComponent(urlComponents.path)
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpMethod = isLike == true ? "POST" : "DELETE"

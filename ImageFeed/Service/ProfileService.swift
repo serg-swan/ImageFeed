@@ -25,10 +25,10 @@ final class ProfileService {
       }
     
     func makeProfileRequest (token: String) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/me") else {
-            print("Не верный url")
-            fatalError("Invalid URL")
-        }
+        let baseUrl = Constants.defaultBaseURL
+        var urlComponents = URLComponents()
+        urlComponents.path = "/me"
+        let url = baseUrl.appendingPathComponent(urlComponents.path)
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request

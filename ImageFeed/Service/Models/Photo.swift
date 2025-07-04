@@ -18,7 +18,7 @@ struct Photo {
     init(from result: PhotoResult) {
         self.id = result.id
         self.size = CGSize(width: result.width, height: result.height)
-        self.createdAt = ISO8601DateFormatter().date(from: result.createdAt)
+        self.createdAt = result.createdAt.flatMap(DateFormatter.iso8601Formatter.date(from:))
         self.welcomeDescription = result.description
         self.thumbImageURL = result.urls.thumb
         self.largeImageURL = result.urls.regular

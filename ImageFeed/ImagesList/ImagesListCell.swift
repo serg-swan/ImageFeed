@@ -23,7 +23,7 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     
-    @IBAction func didTapButton(_ sender: Any) {
+    @IBAction private func didTapButton(_ sender: Any) {
         delegate?.imageListCellDidTapLike(self)
        
     }
