@@ -20,11 +20,15 @@ final class ProfileService {
     
     //MARK: Public Methods
     
+    func clearProfile() {
+          profile = nil
+      }
+    
     func makeProfileRequest (token: String) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/me") else {
-            print("Не верный url")
-            fatalError("Invalid URL")
-        }
+        let baseUrl = Constants.defaultBaseURL
+        var urlComponents = URLComponents()
+        urlComponents.path = "/me"
+        let url = baseUrl.appendingPathComponent(urlComponents.path)
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
@@ -35,7 +39,7 @@ final class ProfileService {
         
         assert(Thread.isMainThread)
         task?.cancel()
-        
+        task = nil
         guard let token = self.token.token   else {
             completion(.failure(ProfileServiceError.invalidProfileRequest))
             return
@@ -45,7 +49,7 @@ final class ProfileService {
             return
         }
         
-        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileRsult, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             defer {
                 self?.task = nil
             }

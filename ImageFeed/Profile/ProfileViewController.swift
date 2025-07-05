@@ -33,12 +33,12 @@ final class ProfileViewController: UIViewController {
         setupButtonUI()
         addSubview()
         setupConstraint()
-        configurePrifileAvatar()
+        configureProfileAvatar()
         updateAvatar()
     }
     
     // MARK: - Private Methods
-    private func configurePrifileAvatar() {
+    private func configureProfileAvatar() {
         guard let profile else { return }
         updateProfileDetails(profile)
         profileImageServiceObserver = NotificationCenter.default
@@ -136,12 +136,40 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
+    private func switchToSplashViewController() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        window.rootViewController = SplashViewController()
+    }
+    
+    private  func showOut() {
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены, что хотите выйти?",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Да",
+                style: .cancel,
+                handler: { _ in
+                    self.switchToSplashViewController()
+                }
+            )
+        )
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Нет",
+                style: .default,
+                handler: nil
+            )
+        )
+        present(alert, animated: true)
+    }
+    
     @objc
     private func didTapButton() {
-        KeychainWrapper.standard.removeObject(forKey: "OAuth2Token")
-        print("Токен удален")
-        OAuth2TokenStorage.shared.token = nil
-        
+        ProfileLogoutService.shared.logout()
+        showOut()
     }
     
 }

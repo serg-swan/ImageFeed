@@ -10,9 +10,9 @@ import UIKit
 import SwiftKeychainWrapper
 
 final class OAuth2Service {
-    // глобальная точка входа
+   
     static let shared = OAuth2Service()
-    // приватный конструктор. синглтон должен гарантировать,что в приложении будет единственный экземпляр класса.
+   
     private init() {}
     
     // MARK: - Private Properties

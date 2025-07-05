@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct ProfileRsult: Codable {
+struct ProfileResult: Codable {
     let username: String
     var firstName: String?
     var lastName: String?
