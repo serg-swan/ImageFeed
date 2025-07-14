@@ -32,11 +32,13 @@ final class ImagesListCell: UITableViewCell {
         imageCell.kf.cancelDownloadTask()
         imageCell.image = UIImage(named: "placeholderImageCell")
         currentImageURL = nil
+      
     }
     func setIsLiked (_ isLiked: Bool) {
         DispatchQueue.main.async {
             let image = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
             self.likeButton.setImage(image, for: .normal)
+            self.likeButton.accessibilityIdentifier = isLiked ? "like_button_on" : "like_button_off"
         }
     }
 }

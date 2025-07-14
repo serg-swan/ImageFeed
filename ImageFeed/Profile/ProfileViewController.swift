@@ -9,13 +9,18 @@ import Foundation
 import Kingfisher
 import SwiftKeychainWrapper
 
-
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateProfileDetails(_ name: String,_ userName: String,_ bio: String)
+    func updateAvatar()
+    func showOut()
+}
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
-    
+     var presenter: ProfileViewPresenterProtocol?
+  
     // MARK: - Private Properties
-    private var profileImageServiceObserver: NSObjectProtocol?
-    private let profile = ProfileService.shared.profile
+ 
     private let imageView = UIImageView()
     private let nameLabel = UILabel()
     private let loginLabel = UILabel()
@@ -33,49 +38,62 @@ final class ProfileViewController: UIViewController {
         setupButtonUI()
         addSubview()
         setupConstraint()
-        configureProfileAvatar()
+        setUpAvatarUI()
+        presenter?.viewDidLoad()
         updateAvatar()
+        button.accessibilityIdentifier = "logout button"
     }
+    
+    // MARK: - Public Methods
+
+    func configure(_ presenter: ProfileViewPresenterProtocol) {
+           self.presenter = presenter
+        self.presenter?.view = self
+       }
+    
+    func updateAvatar() {
+        presenter?.updateAvatar(imageView)
+    }
+    
+    func updateProfileDetails(_ name: String,_  userName: String,_ bio: String) {
+        nameLabel.text = name
+        loginLabel.text = userName
+        descriptionLabel.text = bio
+    }
+    
+    func showOut() {
+       let alert = UIAlertController(title: "Пока, пока!",
+                                     message: "Уверены, что хотите выйти?",
+                                     preferredStyle: .alert)
+       
+       alert.addAction(
+           UIAlertAction(
+               title: "Да",
+               style: .cancel,
+               handler: { _ in
+                   self.switchToSplashViewController()
+               }
+           )
+       )
+       
+       alert.addAction(
+           UIAlertAction(
+               title: "Нет",
+               style: .default,
+               handler: nil
+           )
+       )
+       present(alert, animated: true)
+   }
     
     // MARK: - Private Methods
-    private func configureProfileAvatar() {
-        guard let profile else { return }
-        updateProfileDetails(profile)
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(forName: ProfileImageService.didChangeNotification,
-                         object: nil,
-                         queue: .main
-            ) { [weak self] _ in
-                print("Получено уведомление об изменении аватара!")
-                guard let  self = self  else { return}
-                self.updateAvatar()
-            }
-        
-    }
     
-    private func updateAvatar() {
-        guard let profileImageURL = ProfileImageService.shared.avatarURL,
-              let url = URL(string: profileImageURL)
-        else { return }
-        let placeholderImage =  UIImage(systemName: "person.crop.circle.fill")
+    private func setUpAvatarUI() {
         imageView.tintColor = .gray
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        let processor = RoundCornerImageProcessor(cornerRadius: 16)
-        imageView.kf.indicatorType = .activity
-        imageView.kf.setImage(with: url,
-                              placeholder: placeholderImage ,
-                              options: [.processor(processor)])
     }
-    
-    private func updateProfileDetails(_ profile: Profile) {
-        nameLabel.text = profile.name
-        loginLabel.text = profile.userName
-        descriptionLabel.text = profile.bio
-    }
-    
     private func setupNameLabelUI() {
         let nameLabel = self.nameLabel
-        nameLabel.text = "Екатерина Новикова"
         nameLabel.font = .boldSystemFont(ofSize: 23)
         nameLabel.textColor = UIColor(named: "YP White (iOS)") ?? .white
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -83,14 +101,12 @@ final class ProfileViewController: UIViewController {
     
     private func setupLoginUI() {
         let loginLabel = self.loginLabel
-        loginLabel.text = "@ekaterina_nov"
         loginLabel.font = .systemFont(ofSize: 13)
         loginLabel.textColor = UIColor(named: "YP Gray (iOS)") ?? .gray
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     private func setupDescriptionLabelUI() {
         let descriptionLabel = self.descriptionLabel
-        descriptionLabel.text = "Hello, world!"
         descriptionLabel.font = .systemFont(ofSize: 13)
         descriptionLabel.textColor = UIColor(named: "YP White (iOS)") ?? .white
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -141,35 +157,9 @@ final class ProfileViewController: UIViewController {
         window.rootViewController = SplashViewController()
     }
     
-    private  func showOut() {
-        let alert = UIAlertController(title: "Пока, пока!",
-                                      message: "Уверены, что хотите выйти?",
-                                      preferredStyle: .alert)
-        
-        alert.addAction(
-            UIAlertAction(
-                title: "Да",
-                style: .cancel,
-                handler: { _ in
-                    self.switchToSplashViewController()
-                }
-            )
-        )
-        
-        alert.addAction(
-            UIAlertAction(
-                title: "Нет",
-                style: .default,
-                handler: nil
-            )
-        )
-        present(alert, animated: true)
-    }
-    
     @objc
     private func didTapButton() {
-        ProfileLogoutService.shared.logout()
-        showOut()
+       presenter?.didTapButton()
     }
     
 }

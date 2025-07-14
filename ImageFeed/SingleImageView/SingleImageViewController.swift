@@ -42,6 +42,7 @@ final class SingleImageViewController: UIViewController {
             return loadImage() }
         updateUI(with: image)
         
+        
     }
     
     // MARK: - Private Methods
