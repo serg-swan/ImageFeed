@@ -29,6 +29,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTP-ur-EV1">
                                 <rect key="frame" x="16" y="760" width="398" height="48"/>
                                 <color key="backgroundColor" name="YP White (iOS)"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="zXC-H1-gO6"/>
                                 </constraints>
@@ -68,7 +69,7 @@
         <!--Web View View Controller-->
         <scene sceneID="9Kl-bP-6eO">
             <objects>
-                <viewController id="a62-sJ-Lqm" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="a62-sJ-Lqm" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TJF-jY-few">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -262,6 +263,7 @@
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oQa-67-9LH" userLabel="Back">
                                 <rect key="frame" x="0.0" y="59" width="44" height="44"/>
+                                <accessibility key="accessibilityConfiguration" identifier="nav back button white"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="EoQ-Yp-HgG"/>
                                     <constraint firstAttribute="width" constant="44" id="v3m-68-TLc"/>

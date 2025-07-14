@@ -28,6 +28,10 @@ final class AuthViewController: UIViewController {
                 assertionFailure("Failed to prepare for \(showWebViewIdentifier)")
                 return
             }
+            let authHelper = AuthHelper(configuration: AuthConfiguration.standard)
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -47,8 +51,8 @@ final class AuthViewController: UIViewController {
 }
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        vc.dismiss(animated: true) // Закрыли WebView
-        UIBlockingProgressHUD.show()//
+        vc.dismiss(animated: true)
+        UIBlockingProgressHUD.show()
         OAuth2Service.shared.fetchOAuthToken(code) { [weak self] result in
             guard let self else { return }
             switch result {
