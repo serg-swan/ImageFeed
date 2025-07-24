@@ -5,8 +5,6 @@
 //  Created by Сергей Лебедь on 26.05.2025.
 //
 
-import Foundation
-
 import UIKit
 
 final class SplashViewController: UIViewController {

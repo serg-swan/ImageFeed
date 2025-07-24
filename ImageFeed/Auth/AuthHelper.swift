@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 
 protocol AuthHelperProtocol {
     func authRequest() -> URLRequest?
@@ -15,7 +14,7 @@ protocol AuthHelperProtocol {
 
 final class AuthHelper: AuthHelperProtocol {
     
-    let configuration: AuthConfiguration
+ private let configuration: AuthConfiguration
     init(configuration: AuthConfiguration) {
         self.configuration = configuration
     }

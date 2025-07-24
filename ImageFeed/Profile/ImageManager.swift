@@ -5,7 +5,7 @@
 //  Created by Сергей Лебедь on 11.07.2025.
 //
 
-import Foundation
+
 import UIKit
 import Kingfisher
 
