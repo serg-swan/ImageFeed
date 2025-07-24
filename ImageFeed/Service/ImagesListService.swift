@@ -27,7 +27,7 @@ final class ImagesListService {
         task?.cancel()
         task = nil
         guard let request = makeLikedPhotosRequest(token: token, photoId: photoId, isLike: isLike) else {
-            completion(.failure(ImagesListServiseError.InvalidImagesListResponse))
+            completion(.failure(ImagesListServiceError.InvalidImagesListResponse))
             return
         }
         let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
@@ -79,7 +79,7 @@ final class ImagesListService {
         guard task == nil else {return}
         
         guard let request = makePhotosNextPageRequest(token: token, page: nextPage) else {
-            completion(.failure(ImagesListServiseError.InvalidImagesListResponse))
+            completion(.failure(ImagesListServiceError.InvalidImagesListResponse))
             return
         }
         lastLoadedPage = nextPage

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ImagesListServiseError: Error {
+enum ImagesListServiceError: Error {
     case InvalidImagesListResponse
     }
 
